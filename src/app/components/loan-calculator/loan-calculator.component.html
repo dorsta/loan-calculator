@@ -1,0 +1,86 @@
+<mat-card>
+  <mat-form-field appearance="standard">
+    <mat-label>Monthly income</mat-label>
+    <input
+      matInput
+      placeholder="Monthly income"
+      type="number"
+      [value]="calculator.monthlyIncome / hiddenFractionalPart"
+      (change)="onIncomeInput($event)"
+    />
+    <mat-hint>Min: 500</mat-hint>
+  </mat-form-field>
+  <p class="error" *ngIf="errors.monthlyIncome">{{ errors.monthlyIncome }}</p>
+
+  <mat-form-field appearance="standard">
+    <mat-label>Requested amount</mat-label>
+    <input
+      matInput
+      placeholder="Requested amount"
+      type="number"
+      [value]="calculator.requestedAmount / hiddenFractionalPart"
+      (change)="onAmountInput($event)"
+    />
+    <mat-hint>Min: 20000, max: 50000</mat-hint>
+  </mat-form-field>
+  <p class="error" *ngIf="errors.requestedAmount">
+    {{ errors.requestedAmount }}
+  </p>
+
+  <mat-form-field appearance="standard">
+    <mat-label>Loan term</mat-label>
+    <input
+      matInput
+      placeholder="Loan term"
+      type="number"
+      [(ngModel)]="calculator.loanTerm"
+    />
+    <mat-hint>Min: 36, max 360</mat-hint>
+  </mat-form-field>
+  <p class="error" *ngIf="errors.loanTerm">{{ errors.loanTerm }}</p>
+
+  <mat-form-field appearance="standard">
+    <mat-label>Children</mat-label>
+    <mat-select [(value)]="calculator.children" required>
+      <mat-option
+        *ngFor="let childrenState of childStateChoices"
+        [value]="childrenState.value"
+      >
+        {{ childrenState.viewName }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <p class="error" *ngIf="errors.children">{{ errors.children }}</p>
+
+  <mat-form-field appearance="standard">
+    <mat-label>Co-applicant</mat-label>
+    <mat-select [(value)]="calculator.coapplicant" required>
+      <mat-option
+        *ngFor="let coApplicant of coApplicantChoices"
+        [value]="coApplicant.value"
+      >
+        {{ coApplicant.viewName }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <p class="error" *ngIf="errors.coapplicant">{{ errors.coapplicant }}</p>
+
+  <div *ngIf="result" class="result">
+    <h4>Result</h4>
+    <mat-form-field>
+      <mat-label>Loan amount:</mat-label>
+      <input matInput [value]="result.loanAmount" readonly />
+    </mat-form-field>
+    <mat-form-field *ngIf="result">
+      <mat-label>Interest Rate:</mat-label>
+      <input matInput [value]="result.interestRate" readonly />
+    </mat-form-field>
+  </div>
+
+  <div class="button-row">
+    <button mat-flat-button color="primary" type="submit" (click)="calculate()">
+      Calculate
+    </button>
+    <button mat-stroked-button color="primary" (click)="reset()">Reset</button>
+  </div>
+</mat-card>
